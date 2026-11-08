@@ -1,0 +1,64 @@
+/* Дополнительный интерфейс проекта Crilik. Права на изображения карт принадлежат правообладателям игры. */
+:root { --bg:#100b17; --panel:#201827; --panel2:#2c2032; --edge:#584154; --gold:#ffca6b; --purple:#cc81ed; --red:#ff6669; --mint:#8ce8b9; --ink:#fff7eb; }
+html {scroll-padding-top:126px;}
+body {background:radial-gradient(ellipse 45% 34% at 95% -7%,#64283d99,transparent 90%),radial-gradient(ellipse 45% 36% at 0% 5%,#392b6899,transparent 90%),linear-gradient(175deg,#130b17,#130f1c 55%,#1a111c) fixed;}
+body:before {content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.08;background-image:repeating-linear-gradient(-50deg,transparent 0,transparent 13px,#ffdc9510 14px,#ffdc9510 15px)}
+#app,.wrap,#editionPicker{position:relative}
+#editionPicker{background:linear-gradient(125deg,#24152e,#1d1421 58%,#4a2431);border-bottom:2px solid #a46c47;box-shadow:0 7px 28px #000a}
+#editionPicker strong{color:#ffd57a;font-size:13px;font-weight:950;text-shadow:0 2px 3px #0008}
+#editionButtons button{border-color:#79506c;background:#332437;font-weight:850;box-shadow:0 2px 7px #08080888}
+#editionButtons button.active{background:linear-gradient(135deg,#ffdf7d,#eb8b48);box-shadow:0 2px 9px #e4834750}
+#editionButtons button.swamp.active{background:linear-gradient(135deg,#b9f5a5,#6abd7b)}
+.brandmark{background:linear-gradient(130deg,#8f374b,#2d194c);color:#ffdd83;border-color:#dd945e;box-shadow:0 7px 25px #ec66472b}
+.brand h1{font-weight:950;text-shadow:1px 2px #0009;letter-spacing:.015em}
+.brand h1 span{color:#ffbf62}
+.tabs{background:linear-gradient(#160f21ef,#160f21ed);backdrop-filter:blur(8px);padding-bottom:9px}
+.tab{border-color:#68445a;background:#241b30;color:#f0d9eb}.tab.active{background:linear-gradient(140deg,#f8d375,#ec9553);border-color:#ffe4a5;color:#2c1724;box-shadow:0 3px 11px #c26b3655}
+.btn.primary{background:linear-gradient(125deg,#ffde7c,#f5a84d 50%,#f17c55);color:#261319;font-weight:850}
+.btn.purple{background:linear-gradient(155deg,#6a3571,#4f326b);border-color:#9a5eaa}
+.fastHero,.startIntro{background:linear-gradient(125deg,#462638,#22203a 61%,#221826);border:1px solid #9c5d6b;box-shadow:0 8px 28px #0005}
+.fastHero h2,.startIntro h2 {font-weight:930;letter-spacing:-.03em}
+.fastModule,.startPlayer,.card,.marketCard,.libcard,.handCard,.dialog{border-color:#65465c;box-shadow:0 5px 18px #07070f50}
+.startRule{background:#34243a}
+.startIntro .startControls .btn{min-height:48px}
+.handCard{min-width:146px;max-width:198px;overflow:hidden}
+.handCard .cardArt{width:100%;height:130px;object-fit:cover;object-position:top;border-radius:7px;border:1px solid #e4be9c55;display:block;margin:1px auto 9px;background:linear-gradient(145deg,#5c2949,#27203c)}
+.handCard strong{display:block;font-weight:850;font-size:13px}
+.libcard{display:flex;flex-direction:column;gap:5px;overflow:hidden;background:linear-gradient(160deg,#272133,#1c1825)}
+.libcard .cardArt{object-fit:cover;object-position:top;width:100%;height:170px;border-radius:10px;cursor:zoom-in;border:1px solid #77546c;background:#332439;box-shadow:0 7px 12px #09080944}
+.libcard strong{font-weight:860;line-height:1.25}
+.libcard p{flex:1;overflow-wrap:anywhere}
+.libcard .row{margin-top:auto}
+.marketArt{height:165px;width:100%;object-fit:cover;object-position:top;display:block;border-radius:8px;margin:0 0 8px}
+.tinyCardArt{height:48px;width:36px;object-fit:cover;object-position:top;flex:0 0 auto;border-radius:5px;border:1px solid #7e587a;background:#261d2c}
+.compactMarketRow{grid-template-columns:40px minmax(0,1fr) auto;border-color:#6d475c;background:#2a2230}
+.compactMarketRow .marketIcon{height:50px;width:38px;overflow:hidden;background:#44304a}
+.compactMarketRow .marketIcon .tinyCardArt{height:50px;width:38px;border:0}
+.quickResult{border-color:#634660;background:#2b2135}
+.quickResult .tinyCardArt{height:56px;width:42px}
+.photoViewer[hidden]{display:none!important}
+.photoViewer{position:fixed;inset:0;background:#000d;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px)}
+.photoViewerStage{max-height:calc(100dvh - 55px);max-width:min(650px,95vw);display:flex;flex-direction:column;align-items:center;gap:9px}
+.photoViewer img{max-height:calc(100dvh - 120px);max-width:90vw;border-radius:12px;box-shadow:0 10px 60px #000b;object-fit:contain}
+.photoViewerCaption{font-weight:800;color:#ffe0a6;text-align:center}
+.photoViewerClose{position:absolute;top:12px;right:14px;background:#4b3040;border:1px solid #8f6679;border-radius:12px;padding:9px 13px;font-size:24px;z-index:2}
+.floatingPlus{border-radius:50%;box-shadow:0 8px 32px #ff7d5566;background:linear-gradient(140deg,#ffd871,#ed7b4c);width:62px;height:62px}
+.strategyNotice{background:linear-gradient(120deg,#31263c,#2a2132);border:1px solid #705366;border-left:4px solid #efac62;border-radius:10px;padding:12px;color:#f4dbe5;margin:12px 0;font-size:13px}
+.strategyNotice b{color:#ffe09d}
+@media(min-width:950px){.libraryGrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}}
+@media(max-width:570px){.brandmark{width:46px;height:46px;font-size:26px}.wrap{padding:8px 10px 92px}.fastActions .btn{min-height:48px}.handCard{min-width:135px;max-width:165px}.handCard .cardArt{height:100px}.libcard .cardArt{height:175px}.libraryGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.libcard{padding:9px}.libcard .row .btn{font-size:11px;min-height:33px}.libcard .row{gap:4px}.fastHero{margin-top:7px}}
+@media(max-width:360px){.libraryGrid{grid-template-columns:1fr}}
+
+/* Application setup + offline photo pack — global, above the embedded game. */
+.offlineFab{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:280;border:1px solid #a77a46;border-radius:999px;width:46px;height:46px;display:grid;place-items:center;background:linear-gradient(145deg,#d6a55d,#8f5742);color:#26161e;font-size:23px;box-shadow:0 7px 25px #0009;cursor:pointer}
+.offlineFab:focus-visible,.offlineSheet button:focus-visible{outline:3px solid #a8e8dd;outline-offset:2px}
+.offlineBackdrop[hidden]{display:none!important}.offlineBackdrop{position:fixed;inset:0;z-index:350;background:#08060acc;display:flex;justify-content:center;align-items:flex-end;padding:0}
+.offlineSheet{width:min(540px,100%);padding:18px 17px max(22px,env(safe-area-inset-bottom));border:1px solid #76604d;border-radius:19px 19px 0 0;background:#211b2b;color:#f6f1ea;box-shadow:0 0 60px #000b;max-height:90dvh;overflow:auto}
+.offlineHeading{display:flex;justify-content:space-between;align-items:center;gap:10px}.offlineHeading h2{margin:0;font-size:19px}.offlineHeading button{width:40px;height:40px;background:#383041;border:1px solid #65566d;border-radius:10px;color:#fff}
+.offlineSheet p{font-size:13px;line-height:1.5;margin:13px 0;color:#e0d8e5}
+.offlineSheet>button{display:block;width:100%;padding:12px 16px;min-height:46px;margin:8px 0;background:#34283e;border:1px solid #6a5c75;border-radius:11px;color:#fff;font-size:14px;font-weight:750}
+.offlineSheet>button[hidden]{display:none!important}
+.offlineSheet>button.offlinePrimary{background:linear-gradient(135deg,#efbb6b,#c87d4c);border-color:#e7aa65;color:#28191c}.offlineSheet>button:disabled{opacity:.55;cursor:not-allowed}
+#offlineStatus{padding:10px;border-radius:9px;background:#2d2738;border:1px solid #483d57;color:#ead6c6;font-size:12px;margin-top:9px;min-height:40px}
+.offlineSheet .offlineHint{font-size:11px;color:#bcb4c9}
+@media(min-width:700px){.offlineBackdrop{align-items:center;padding:20px}.offlineSheet{border-radius:19px}}

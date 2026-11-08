@@ -71,3 +71,10 @@ body:before {content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .libcard[hidden]{display:none!important}
 .libcard .cardSourceTag{max-width:100%;overflow-wrap:anywhere}
 @media(max-width:570px){.libcard .cardArt{height:auto!important;aspect-ratio:3/4.35;max-height:none}.libcard{min-width:0}.libcard p{overflow-wrap:anywhere}}
+
+/* v16: uncropped photo viewport. The source photo itself might still need recropping. */
+.libcard .cardArt,.handCard .cardArt,.marketArt,.photoCompareCard .cardArt {object-fit:contain!important;object-position:center center!important;}
+.libcard .cardArt{width:100%;height:auto!important;aspect-ratio:auto!important;max-height:none!important;min-height:0!important;}
+.photoViewer{overflow:auto;touch-action:pan-y;}
+.photoViewerStage{max-height:95dvh;max-width:95vw;}
+.photoViewer img{object-fit:contain!important;object-position:center!important;max-width:min(95vw,760px);max-height:calc(100dvh - 105px);width:auto;height:auto;}

@@ -355,7 +355,10 @@
       "photoConfidence": "high",
       "copies": 2,
       "chips": 0,
-      "chipSymbol": false
+      "chipSymbol": false,
+      "aliases": [
+        "Эпичный мерч боевых магов"
+      ]
     },
     {
       "name": "Злоширак",
@@ -2282,7 +2285,7 @@
       "isLegend": true
     },
     {
-      "name": "Беспредел 1",
+      "name": "Беспредел 2J",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун отхватывает 5 урона.",
@@ -2301,10 +2304,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 1"
+      ],
+      "eventCode": "2J"
     },
     {
-      "name": "Беспредел 2",
+      "name": "Беспредел 2F",
       "type": "other",
       "tag": "attack",
       "text": "Атака: самый хилый колдун становится лошарой, затем накручивает жизни до максимума (лошарного).",
@@ -2323,10 +2330,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 2"
+      ],
+      "eventCode": "2F"
     },
     {
-      "name": "Беспредел 3",
+      "name": "Беспредел 2I",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун голосует за одного колдуна. Кто набрал больше всего голосов, становится лошарой; при равенстве — все лидеры.",
@@ -2345,10 +2356,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 3"
+      ],
+      "eventCode": "2I"
     },
     {
-      "name": "Беспредел 4",
+      "name": "Беспредел 2N",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун может уничтожить карту в руке или сбросе; если ты лошара, потрать 3 жизни, чтобы сделать это.",
@@ -2367,10 +2382,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 4"
+      ],
+      "eventCode": "2N"
     },
     {
-      "name": "Беспредел 5",
+      "name": "Беспредел 2S",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун сбрасывает 2 верхние карты своей колоды и выбирает: уничтожить обе или не уничтожать ни одной.",
@@ -2389,10 +2408,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 5"
+      ],
+      "eventCode": "2S"
     },
     {
-      "name": "Беспредел 6",
+      "name": "Беспредел 2P",
       "type": "other",
       "tag": "other",
       "text": "Каждый лошара может потратить 5 жизней или 1 чипсину, чтобы стать нормальным.",
@@ -2411,10 +2434,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 6"
+      ],
+      "eventCode": "2P"
     },
     {
-      "name": "Беспредел 7",
+      "name": "Беспредел 2M",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун получает 2 чипсины. Затем атака: каждый отхватывает 1 урон за каждую свою чипсину.",
@@ -2433,10 +2460,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 7"
+      ],
+      "eventCode": "2M"
     },
     {
-      "name": "Беспредел 8",
+      "name": "Беспредел 2Q",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун может свести свои жизни к 10, чтобы получить 1 чипсину.",
@@ -2455,10 +2486,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 8"
+      ],
+      "eventCode": "2Q"
     },
     {
-      "name": "Беспредел 9",
+      "name": "Беспредел 2O",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун должен либо сбросить все карты с руки и взять 5 карт, либо отхватить 5 урона.",
@@ -2477,10 +2512,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 9"
+      ],
+      "eventCode": "2O"
     },
     {
-      "name": "Беспредел 10",
+      "name": "Беспредел 2E",
       "type": "other",
       "tag": "other",
       "text": "Положи 1 чипсину на каждую карту барахолки. Получая одну из этих карт, колдун получит и чипсину.",
@@ -2499,10 +2538,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 10"
+      ],
+      "eventCode": "2E"
     },
     {
-      "name": "Беспредел 11",
+      "name": "Беспредел 2R",
       "type": "other",
       "tag": "other",
       "text": "Уничтожь легендарную барахолку. Выложи 4 новые легенды на замену (обычный размер барахолки 3).",
@@ -2521,10 +2564,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 11"
+      ],
+      "eventCode": "2R"
     },
     {
-      "name": "Беспредел 12",
+      "name": "Беспредел 2G",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун получает 1 чипсину. Затем уничтожь легендарную барахолку и выложи новые карты на замену.",
@@ -2543,10 +2590,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 12"
+      ],
+      "eventCode": "2G"
     },
     {
-      "name": "Беспредел 13",
+      "name": "Беспредел 2C",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун может потерять половину своих чипсин (округляя вниз), чтобы уничтожить карту в руке или стопке сброса.",
@@ -2565,10 +2616,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 13"
+      ],
+      "eventCode": "2C"
     },
     {
-      "name": "Беспредел 14",
+      "name": "Беспредел 2T",
       "type": "other",
       "tag": "other",
       "text": "Баттл «Кто круче»: начиная с активного, каждый участвует или пасует. Участвующие открывают руки: максимальная суммарная стоимость получает 2 карты, остальные сбрасывают руки.",
@@ -2587,10 +2642,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 14"
+      ],
+      "eventCode": "2T"
     },
     {
-      "name": "Беспредел 15",
+      "name": "Беспредел 2B",
       "type": "other",
       "tag": "other",
       "text": "Каждый раскрывает случайную карту с руки. Может уничтожить её или потратить 2 жизни, замешать обратно и раскрыть другую; повторять до уничтожения.",
@@ -2609,10 +2668,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 15"
+      ],
+      "eventCode": "2B"
     },
     {
-      "name": "Беспредел 16",
+      "name": "Беспредел 2K",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун сбрасывает половину своих карт-постоянок, округляя вверх.",
@@ -2631,10 +2694,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 16"
+      ],
+      "eventCode": "2K"
     },
     {
-      "name": "Беспредел 17",
+      "name": "Беспредел 2D",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун выбирает одного врага. Этот враг получает 1 чипсину.",
@@ -2653,10 +2720,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 17"
+      ],
+      "eventCode": "2D"
     },
     {
-      "name": "Беспредел 18",
+      "name": "Беспредел 2H",
       "type": "other",
       "tag": "other",
       "text": "Все колдуны, кроме лошар, получают по 1 чипсине.",
@@ -2675,10 +2746,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 18"
+      ],
+      "eventCode": "2H"
     },
     {
-      "name": "Беспредел 19",
+      "name": "Беспредел 2L",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун сбрасывает свою колоду, затем уничтожает 1 карту из своей стопки сброса.",
@@ -2697,10 +2772,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 19"
+      ],
+      "eventCode": "2L"
     },
     {
-      "name": "Беспредел 20",
+      "name": "Беспредел 2A",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун отхватывает урон, равный стоимости самой дорогой карты у него в руке.",
@@ -2719,10 +2798,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Беспредел 20"
+      ],
+      "eventCode": "2A"
     },
     {
-      "name": "Мегабеспредел 1",
+      "name": "Мегабеспредел ME",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун сводит свои жизни к 5.",
@@ -2741,10 +2824,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 1"
+      ],
+      "eventCode": "ME"
     },
     {
-      "name": "Мегабеспредел 2",
+      "name": "Мегабеспредел MC",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун получает 1 чипсину за каждый свой жетон дохлого колдуна.",
@@ -2763,10 +2850,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 2"
+      ],
+      "eventCode": "MC"
     },
     {
-      "name": "Мегабеспредел 3",
+      "name": "Мегабеспредел MA",
       "type": "other",
       "tag": "attack",
       "text": "Атака: нанеси каждому колдуну урон, равный стоимости самой дорогой легенды на барахолке.",
@@ -2785,10 +2876,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 3"
+      ],
+      "eventCode": "MA"
     },
     {
-      "name": "Мегабеспредел 4",
+      "name": "Мегабеспредел MB",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун получает 3 вялые палочки на руку.",
@@ -2807,10 +2902,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 4"
+      ],
+      "eventCode": "MB"
     },
     {
-      "name": "Мегабеспредел 5",
+      "name": "Мегабеспредел MG",
       "type": "other",
       "tag": "other",
       "text": "Каждый колдун может уничтожить карту из руки или своего сброса. Если ты не лошара, можешь сделать и то и другое.",
@@ -2829,10 +2928,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 5"
+      ],
+      "eventCode": "MG"
     },
     {
-      "name": "Мегабеспредел 6",
+      "name": "Мегабеспредел MD",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун становится лошарой. Если ты и так лошара, ты становишься нормальным.",
@@ -2851,10 +2954,14 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 6"
+      ],
+      "eventCode": "MD"
     },
     {
-      "name": "Мегабеспредел 7",
+      "name": "Мегабеспредел MF",
       "type": "other",
       "tag": "attack",
       "text": "Атака: каждый колдун уничтожает верхнюю карту основной колоды. Если уничтоженная карта — беспредел, он проигрывает.",
@@ -2873,7 +2980,11 @@
       "copies": 1,
       "chips": 0,
       "chipSymbol": false,
-      "isEvent": true
+      "isEvent": true,
+      "aliases": [
+        "Мегабеспредел 7"
+      ],
+      "eventCode": "MF"
     }
   ],
   "abilities": [

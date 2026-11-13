@@ -152,7 +152,7 @@ migrateCards(s.library);for(const p of s.players||[])migrateCards(p.cards);
 for(const v of Object.values(s.market||{}))migrateCards(v);for(const h of s.hands||[])migrateCards(h);
 function cardCategory(c){return c.photoGroup==='event'?'event':c.photoGroup==='mega'?'mega':c.photoGroup==='starter'?'starter':c.photoGroup==='legend'||c.isLegend?'legend':c.type||'other'}
 const CATEGORY_OPTIONS=[['all','Все категории'],['starter','Стартовые'],['wizard','Волшебники'],['creature','Твари'],['spell','Заклинания'],['treasure','Сокровища'],['place','Места'],['familiar','Фамильяры'],['legend','Легенды'],['event','Беспределы'],['mega','Мегабеспределы'],['other','Прочее']];
-function catalogSearchText(c){let cat=cardCategory(c);return [c.name,...(c.aliases||[]),c.text||'',TYPES[c.type]||'',TAGS[c.tag]||'',CATEGORY_OPTIONS.find(x=>x[0]===cat)?.[1]||'',cat==='mega'?'мегабеспредел':cat==='event'?'беспредел':''].join(' ').toLocaleLowerCase('ru').replace(/ё/g,'е')}
+function catalogSearchText(c){let cat=cardCategory(c);return [c.name,...(c.name==='Эпичный меч боевых магов'?['Эпичный мерч боевых магов']:[]),...(c.aliases||[]),c.text||'',TYPES[c.type]||'',TAGS[c.tag]||'',CATEGORY_OPTIONS.find(x=>x[0]===cat)?.[1]||'',cat==='mega'?'мегабеспредел':cat==='event'?'беспредел':''].join(' ').toLocaleLowerCase('ru').replace(/ё/g,'е')}
 function matchesCard(c,q,cat){const text=catalogSearchText(c);return (cat==='all'||cardCategory(c)===cat)&&text.includes(String(q||'').toLocaleLowerCase('ru').replace(/ё/g,'е').trim())}
 function filterLibraryLive(){const q=$('libraryFilter')?.value||'',cat=$('libraryCategory')?.value||'all';let visible=0;document.querySelectorAll('#libraryGrid .libcard').forEach(el=>{let show=(cat==='all'||el.dataset.category===cat)&&(el.dataset.search||'').includes(q.toLocaleLowerCase('ru').replace(/ё/g,'е').trim());el.hidden=!show;if(show)visible++});if($('libraryShown'))$('libraryShown').textContent=visible+' карт';}
 
@@ -375,6 +375,180 @@ function chooseTarget(){const hand=(s.hands[s.me]||[]).filter(c=>!c.played);cons
 function fullPlan(){const p=s.players[s.me],q=purchaseBundles(),f=q.funds,hand=f.hand,ph=q.ph,target=chooseTarget();const steps=[];if(s.active!==s.me)steps.push({title:'Сейчас ход другого игрока',body:`Это предварительный план для ${nameOf(s.me)}. Записывай открытые покупки и эффекты соперников. Мощь рассчитана только по известным картам твоей руки.`});else steps.push({title:'Подготовь руку и обнови барахолку',body:'Проверь, что беспределы и мегабеспределы при пополнении уже разыграны, а действия начала хода выполнены.'});const draws=hand.filter(c=>!c.played&&n(c.draw)>0),clean=hand.filter(c=>!c.played&&(n(c.trash)>0||c.tag==='clean')),powers=hand.filter(c=>!c.played&&n(c.power)>0),other=hand.filter(c=>!c.played&&n(c.draw)===0&&n(c.power)===0&&c.tag!=='clean');if(draws.length)steps.push({title:'Сначала разыграй добор',body:`${draws.map(c=>`«${c.name}» (+${c.draw} карт)`).join('; ')}. После добора внеси новые карты в руку и пересчитай план.`});if(clean.length)steps.push({title:'Убери мусор из колоды',body:`${clean.map(c=>`«${c.name}»`).join(', ')}: по возможности уничтожай «Пшики» и вредные палочки, если текст свойства позволяет. Не уничтожай сильные карты ради одного эффекта.`});if(powers.length)steps.push({title:'Получай мощь перед покупками',body:`Разыграй ${powers.map(c=>`«${c.name}» (+${c.power})`).join(', ')} в допустимом порядке; условные эффекты проверь по карте. Надёжно доступная мощь: ${f.power}${f.conditional?`; ещё до ${f.conditional} при выполнении условий` :''}.`});if(target&&target.damage>0)steps.push({title:`Кого выгоднее атаковать: ${target.target.name}`,body:`По видимым данным у цели ${target.target.hp} ❤ и ${target.target.pts} известных ПО. ${target.target.hp<=target.damage?'Потенциальный добивающий урон — не гарантирован.':'Цель перспективная по очкам и числу жизней.'} Выбирай её только для атак, разрешающих такую цель; учти защиту и условия карт.`});if(p.abilityKind==='wizardChips')steps.push({title:'Используй свойство с волшебниками',body:'Когда ПОЛУЧАЕШЬ карту волшебника (покупкой или эффектом), получи 1 чипсину. Если ты лошара и свойство это позволяет, можешь снять жетон. Простой розыгрыш карты или её добор с колоды не равен получению.'});if(p.abilityKind==='creatureChips')steps.push({title:'Забирай бонус при получении тварей',body:'Проверяй точный текст своего свойства при получении карты типа «Тварь». Фамильяр сам по себе не является тварью.'});if((p.familiarName||'').toLocaleLowerCase('ru').includes('мескалито')&&p.deaths>0&&s.players.some((o,j)=>j!==s.me&&o.deaths>0))steps.push({title:'Мескалито: не забывай про защиту',body:'Если противник атакует, Мескалито может позволить избежать атаки и обменяться ЖДК с атакующим при наличии хотя бы одного жетона у каждого. Обмен необязателен, точный эффект смотри по карте.'});if(p.hp<=7)steps.push({title:'Избеги очередной смерти',body:`У тебя ${p.hp} ❤: защита и лечение могут быть выгоднее агрессивной карты. Жетон смерти обычно стоит −3 ПО, а некоторые дополнительно меняют ситуацию.`});if(p.loser)steps.push({title:'Избавься от статуса лошары',body:'Если получаешь подходящую карту/эффект, сними жетон: уйдёт штраф −5 ПО и вернётся обычный максимум жизней. Срабатывание зависит от точного текста.'});if(q.bundles.length){const top=q.bundles[0];steps.push({title:'Что покупать в первую очередь',body:`Рекомендуемый набор: ${top.picked.map(c=>`«${c.name}»`).join(' + ')}. Потрать ${top.spentPower} мощи${top.spentChips?` и ${top.spentChips} чипсин`:''}. ${top.picked.map(c=>`${c.name}: ${whyCard(c,ph)}`).join('. ')}. После каждой покупки обнови барахолку в начале следующего хода.`})}else steps.push({title:'Покупка на этом ходу',body:!q.possible.length?'Сначала заполни барахолку: без названий и цен нельзя сравнить реальные покупки.':`Пока доступных сочетаний по бюджету ${f.power} мощи и ${p.chips} чипсин нет. Рассмотри шальную магию за 3 мощи, если её стопка доступна; либо увеличь мощь.`});if(ph==='early')steps.push({title:'Долгосрочная цель',body:'Развивай экономику: добор, +мощь и уничтожение слабых карт. Не заполняй колоду ненужными дешёвыми покупками.'});else if(ph==='middle')steps.push({title:'Подготовь выход на легенды',body:'Накопи мощь и чипсины, чтобы покупать легенды со звёздами. Смотри на темп роста соперников.'});else steps.push({title:'Финал: забирай очки',body:'Ставь победные очки выше долгого разгона. Следи за нехваткой карт для пополнения рынков и за оставшимися ЖДК.'});steps.push({title:'Перед передачей хода',body:'Примени эффекты конца хода, сбрось сыгранные карты и остаток руки, добери пять новых. Если у тебя главный приз в Чипсихозе, получи +1 чипсину.'});return {steps,q,target,ph}}
 function miniPlan(){const d=fullPlan(),best=d.q.bundles[0],p=s.players[s.me];return `<h3 style="margin:7px 0 6px">${best?'Купить '+esc(best.picked.map(c=>c.name).join(' + ')):'Начни с ввода карт'}</h3><p class="small muted" style="margin:0 0 9px">${best?`${best.spentPower} мощи${best.spentChips?` + ${best.spentChips} ◈`:''} · предварительная оценка`:'Внеси цены и параметры карт на двух барахолках.'}</p><div class="guidance"><b>${esc(d.steps.find(st=>st.title.includes('Сначала разыграй'))?.title||d.steps[0].title)}</b><p>${esc((d.steps.find(st=>st.title.includes('Сначала разыграй'))||d.steps[0]).body)}</p></div><button class="btn primary full" data-action="tab" data-tab="strategy">Полная стратегия моего хода</button>`}
 function strategyPage(){ensureQ();const p=s.players[s.me],d=fullPlan(),{q,steps,ph,target}=d;return `<section class="fastHero"><div class="fastTitle"><div><div class="level">Твой помощник · ${ph==='early'?'разгон колоды':ph==='middle'?'развитие':'финал'}</div><h2>План для ${esc(p.name)}</h2><p class="panelText" style="margin:4px 0 0">${q.funds.actual?'Твой ход':'Сейчас ход другого игрока · прогноз'} · гарантированная мощь ${q.funds.power}${q.funds.conditional?` (возможный бонус +${q.funds.conditional})`:``}${s.mode==='mega'?` · чипсины ${p.chips}`:''}</p></div><select id="meSelect" style="max-width:190px" aria-label="Выберите своего игрока">${s.players.map((p,i)=>`<option value="${i}" ${s.me===i?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div><div class="row flexwrap" style="margin-top:10px"><button class="btn purple" data-action="quickOpen" data-kind="hand" data-p="${s.me}">+ Карта в мою руку</button><button class="btn ghost" data-action="tab" data-tab="fast">Изменить барахолку</button><button class="btn ghost" data-action="powerExact">Указать мощь</button></div></section><div class="fastGrid"><main><section class="fastModule"><div class="sectionHead"><h3>Мой ход · пошагово</h3><span class="badge">${steps.length} шагов</span></div>${steps.map((st,i)=>`<div class="planStep"><div class="planNum">${i+1}</div><div><b>${esc(st.title)}</b><p>${esc(st.body)}</p></div></div>`).join('')}</section></main><aside><section class="fastModule"><h3>Лучшие варианты покупки</h3><p class="panelText">Проверены сочетания открытых карт, которые укладываются в имеющуюся мощь и чипсины. Это эвристика, а не гарантированная победа.</p>${q.bundles.length?q.bundles.slice(0,3).map((b,i)=>`<div class="planBundle ${i===0?'best':''}"><div class="bundleMeta"><span class="level">${i===0?'Основной вариант':`Вариант ${i+1}`}</span><b>${b.spentPower} ⚡${b.spentChips?` + ${b.spentChips} ◈`:''}</b></div><b>${esc(b.picked.map(c=>c.name).join(' + '))}</b><p class="small muted" style="margin:6px 0 0">${esc(b.picked.map(c=>whyCard(c,ph)).join(' · '))}</p></div>`).join(''):'<p class="muted">Нет данных о доступных покупках. Добавь карты на рынки и укажи мощь.</p>'}</section><section class="fastModule"><h3>Положение игроков</h3>${s.players.map((v,i)=>`<div class="vsline"><span>${esc(v.name)}${i===s.me?' · Я':''}</span><b>${v.hp} ❤ · ${score(v)} ПО</b></div>`).join('')}<p class="fastFoot">Очки ориентировочные: известные приобретения, штрафы, лошара и ручные поправки. Скрытые карты и особые условия не учтены.</p></section></aside></div><div class="fastFoot">Подсказки рассчитаны локально по введённым параметрам. При условных эффектах, защите и необычных комбинациях приоритет имеет текст физической карты.</div>`}
+
+// v17: transparent tactical advice using the actual effect descriptions.
+// This is a scenario model, NOT a calibrated probability of winning.
+const SR_TACTICS=[['balanced','Сбалансированно'],['attack','Атака'],['defense','Защита'],['economy','Экономика'],['points','Очки']];
+function srFact(c){
+ const t=String(c.text||''),low=t.toLocaleLowerCase('ru'),shown=low.replace(/ё/g,'е');
+ const deal=shown.match(/(?:нанеси|нанес[еи]|получает|отхватывает|наносит|атака:)\s*(?:по\s*)?(\d+)\s*урон/);
+ const heal=shown.match(/(?:накрути|восстанови|получи)\s*(\d+)\s*жизн/);
+ const draw=shown.match(/возьми(?:\s+на\s+руку)?\s*(\d+)\s*карт/);
+ const damage=Math.max(0,n(c.damage),deal?Number(deal[1]):0);
+ return {text:t,damage,heal:Math.max(0,n(c.heal),heal?Number(heal[1]):0),draw:Math.max(0,n(c.draw),draw?Number(draw[1]):0),power:Math.max(0,n(c.power)),conditional:/если|за кажд|можешь|при условии|когда |в этот ход|от этого|при получении|вместо|потрат|сбрось|уничтожь эту/i.test(shown),
+  attack:/атака|нанеси|урон|атакуй|отхватыва/i.test(shown)||damage>0,
+  defense:/защита:|избежать атаки/i.test(shown)||c.tag==='defense',
+  trash:/уничтожь|уничтожить/i.test(shown)||n(c.trash)>0,
+  start:/в начале (своего )?хода/i.test(shown),end:/в конце (своего )?хода/i.test(shown),
+  permanent:/постоянка:/i.test(shown)||c.tag==='permanent',
+  all:/кажд(ому|ый|ого) враг|всем врагам|левому и правому/i.test(shown),
+  forced:/случайн|самому живучему|самый живуч|самому хилому|самый хилый|лев(ому|ый) враг|прав(ому|ый) враг/i.test(shown),
+  schools:(c.schools||[]).join(', ')};
+}
+function srTarget(c,f){
+ const all=s.players.map((p,i)=>({p,i,points:score(p)})).filter(x=>x.i!==s.me);
+ if(!all.length||!f.attack)return '';
+ const t=f.text.toLocaleLowerCase('ru');
+ if(f.all)return 'Цели: все соперники; эффекты и защита проверяются отдельно для каждого.';
+ if(/случайн/i.test(t))return 'Цель случайная — назначить выгодного соперника нельзя.';
+ if(/самому живуч|самый живуч/i.test(t)){all.sort((a,b)=>b.p.hp-a.p.hp);return 'Цель по тексту: самый живучий — '+all[0].p.name+' ('+all[0].p.hp+' ❤).';}
+ if(/самому хил|самый хил/i.test(t)){all.sort((a,b)=>a.p.hp-b.p.hp);return 'Цель по тексту: самый хилый — '+all[0].p.name+' ('+all[0].p.hp+' ❤).';}
+ if(/лев(ому|ый) враг|прав(ому|ый) враг/i.test(t))return 'Цель ограничена положением слева/справа. Сверь реальную рассадку игроков.';
+ all.sort((a,b)=>((b.p.hp<=f.damage&&f.damage>0?1:0)-(a.p.hp<=f.damage&&f.damage>0?1:0))*100+b.points-a.points+(a.p.hp-b.p.hp)*.13);
+ const x=all[0];
+ return 'Предпочтительная цель: '+x.p.name+' ('+x.p.hp+' ❤, '+x.points+' ПО)'+(f.damage&&x.p.hp<=f.damage?' — возможное добивание, если атака проходит и защиты нет.':'.');
+}
+function srPhaseCard(c,f,tactic,hp){
+ if(f.end)return 80;
+ if(f.defense&&f.power===0&&f.draw===0&&!f.attack&&!f.trash)return 95;
+ if(f.start)return 5;
+ if(f.draw)return 10;
+ if(f.trash&&tactic==='economy')return 18;
+ if(f.trash)return 25;
+ if(f.heal&&hp<=9)return 28;
+ if(f.attack)return tactic==='attack'?35:48;
+ if(f.power)return 55;
+ return 65;
+}
+function srExplain(c,f,tactic,hp){
+ const out=[];
+ if(f.draw)out.push('Добор помогает увидеть другие эффекты до покупок.');
+ if(f.trash)out.push('Уничтожать можно только разрешённые текстом карты; не путай уничтожение со сбросом.');
+ if(f.heal)out.push('Лечение '+(hp<=9?'особенно ценно при '+hp+' ❤.':'нужно учитывать до предела жизней.'));
+ if(f.attack)out.push(srTarget(c,f));
+ if(f.power)out.push('Мощь: '+f.power+(f.conditional?' — проверь условие до прибавления.':'.'));
+ if(f.defense)out.push('Защитная реакция применяется только в разрешённый картой момент; подумай, стоит ли сохранять карту на чужой ход.');
+ if(f.permanent)out.push('Постоянный эффект учитывай, только если карта действительно под твоим контролем.');
+ if(f.start||f.end)out.push('Проверь окно '+(f.start?'начала':'конца')+' хода: его нельзя произвольно переносить.');
+ if(f.conditional)out.push('Эффект зависит от условия — не считай бонус гарантированным.');
+ if(f.schools)out.push('Школы/знаки: '+f.schools+'. Сверь сочетания с другими картами.');
+ return out.join(' ');
+}
+function srBuyScore(c,tactic,ph,hp){
+ const f=srFact(c);
+ let v=cardUtility(c,ph,s.players[s.me]);
+ if(f.draw)v+=1.1;
+ if(f.trash&&ph==='early')v+=1.5;
+ if(f.heal&&hp<=10)v+=f.heal*.85;
+ if(f.attack)v+=tactic==='attack'?Math.min(12,f.damage)*.75:Math.min(12,f.damage)*.17;
+ if(f.defense&&hp<=10)v+=tactic==='defense'?5:2;
+ if(tactic==='points')v+=n(c.vp)*2.2;
+ if(tactic==='economy')v+=f.power*1.45+f.draw*.6;
+ if(f.conditional)v-=1.15;
+ return v;
+}
+function srBundleList(q,tactic){
+ return q.bundles.slice().map(b=>({...b,modelScore:b.picked.reduce((v,c)=>v+srBuyScore(c,tactic,q.ph,s.players[s.me].hp),0)-b.spentChips*.3})).sort((a,b)=>b.modelScore-a.modelScore);
+}
+function srEstimate(tactic){
+ const hand=(s.hands[s.me]||[]).filter(c=>!c.played),market=[...(s.market.basic||[]),...(s.market.legend||[])].filter(c=>c.name);
+ if(!hand.length||!market.length||s.players.length<2)return null;
+ const players=s.players.map((p,i)=>({i,hp:Math.max(1,n(p.hp)),score:score(p),cards:Array.isArray(p.cards)?p.cards:[],chips:n(p.chips)}));
+ const mine=players[s.me],factors=hand.map(srFact),observedAttack=factors.reduce((v,f)=>v+(f.attack?f.damage:0)*(f.conditional?.45:.85),0);
+ const knownPower=factors.reduce((v,f)=>v+f.power*(f.conditional?.4:1),0);
+ const knownDraw=factors.reduce((v,f)=>v+f.draw*(f.conditional?.35:1),0);
+ const ph=phase(),horizon=ph==='late'?2:ph==='middle'?3:4,results=[];
+ const key=JSON.stringify([tactic,s.turn,s.me,players.map(p=>[p.hp,p.score,p.cards.length]),hand.map(c=>c.name)]);
+ let seed=2166136261;for(let j=0;j<key.length;j++)seed=Math.imul(seed^key.charCodeAt(j),16777619)>>>0;
+ const random=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296};
+ for(let risk=0;risk<2;risk++){
+  let wins=0;
+  for(let trial=0;trial<500;trial++){
+   const ss=players.map(p=>({i:p.i,hp:p.hp,points:p.score,power:p.cards.reduce((v,c)=>v+Math.max(0,n(c.power)),0)/(p.cards.length||12),deaths:0}));
+   for(let k=0;k<horizon;k++){
+    for(const x of ss){
+     const self=x.i===s.me;
+     let gain=1.0+1.3*random()+x.power*.36;
+     if(self){
+      if(tactic==='points')gain+=2.0+(k===0?.7:0);
+      if(tactic==='economy')gain+=k*.9+knownPower*.12+knownDraw*.22;
+      if(tactic==='attack')gain+=.35;
+      if(tactic==='defense')gain+=.15;
+      if(tactic==='balanced')gain+=1.0+k*.19;
+     }else gain+=risk?.95:.25;
+     x.points+=gain;
+    }
+    const me=ss[s.me],opp=ss.filter(x=>x.i!==s.me);
+    let incoming=opp.reduce((v,x)=>v+random()*(risk?2.5:1.65),0);
+    if(tactic==='defense')incoming*=.45;
+    if(tactic==='balanced')incoming*=.8;
+    me.hp-=incoming;
+    if(tactic==='defense')me.hp+=1.6+random()*1.4;
+    if(tactic==='attack'||tactic==='balanced'){
+     const target=opp.slice().sort((a,b)=>a.hp-b.hp||b.points-a.points)[0];
+     if(target){
+      const dealt=(observedAttack/(k+2.9))*(tactic==='attack'?1:.58)+random()*(tactic==='attack'?4:2);
+      target.hp-=dealt;
+      if(target.hp<=0){target.points-=3;target.hp=20;target.deaths++;me.points+=.55;}
+     }
+    }
+    for(const x of ss)if(x.hp<=0){x.points-=3;x.hp=20;x.deaths++;}
+   }
+   const leader=Math.max(...ss.map(x=>x.points));
+   if(ss[s.me].points>=leader-.001)wins+=ss.filter(x=>x.points>=leader-.001).length===1?1:1/ss.filter(x=>x.points>=leader-.001).length;
+  }
+  results.push(wins/5);
+ }
+ const lo=Math.max(0,Math.round(Math.min(...results))),hi=Math.min(100,Math.round(Math.max(...results)));
+ return {low:lo,high:hi,center:Math.round((lo+hi)/2),horizon};
+}
+function srTacticAdvice(tactic,p){
+ if(tactic==='attack')return 'Старайся добить опасного соперника, но только разрешёнными целями и после проверки защиты.';
+ if(tactic==='defense')return 'Сохраняй карты защиты, при низком здоровье используй лечение и избегай лишнего риска смерти.';
+ if(tactic==='economy')return 'Добор и очистка колоды важнее разового урона, пока до конца игры достаточно ходов.';
+ if(tactic==='points')return 'Покупай карты с высокой ценностью ПО, особенно если конец партии близко.';
+ return 'Не жертвуй выживанием ради незначительного урона; комбинируй добор, мощь и выгодные покупки.';
+}
+function srSteps(tactic){
+ const p=s.players[s.me],hp=n(p.hp),hand=(s.hands[s.me]||[]);
+ const pending=hand.map((c,i)=>({c,i,f:srFact(c)})).filter(x=>!x.c.played);
+ pending.sort((a,b)=>srPhaseCard(a.c,a.f,tactic,hp)-srPhaseCard(b.c,b.f,tactic,hp)||a.i-b.i);
+ const steps=[];
+ steps.push({head:'Подготовка и начало хода',body:'Проверь пополнение барахолки, беспределы, постоянки и эффекты начала хода. Если это чужой ход, план только предварительный.',idx:-1});
+ if(p.abilityText)steps.push({head:'Свойство колдуна',body:String(p.abilityText)+' — применяй только при указанном условии.',idx:-1});
+ if(p.familiarName)steps.push({head:'Фамильяр: '+p.familiarName,body:'Проверь, приобретён ли фамильяр и доступна ли его защита/розыгрыш; одно название не означает, что он в руке.',idx:-1});
+ if(hp<=10)steps.push({head:'Здоровье: '+hp+' ❤',body:'Риск смерти высок. Лечение и защита могут сохранить жетон дохлого колдуна и победные очки. Не трать защиту без необходимости.',idx:-1});
+ for(const x of pending){
+  const f=x.f;
+  const hold=f.defense&&!f.attack&&!f.draw&&!f.trash&&!f.power&&!f.heal;
+  steps.push({head:(hold?'Прибереги: ':'Разыграй: ')+x.c.name,body:(f.text?'Эффект карты: '+f.text+'. ':'Описание эффекта отсутствует — сверь карту вручную. ')+srExplain(x.c,f,tactic,hp),idx:hold?-1:x.i,conditional:f.conditional,hold});
+ }
+ if(!pending.length)steps.push({head:'Рука пока не заполнена',body:'Добавь карты своей руки, иначе порядок розыгрыша рассчитать нельзя.',idx:-1});
+ const funds=planFunds(),b=srBundleList(purchaseBundles(),tactic)[0];
+ steps.push({head:'Покупка после розыгрыша',body:b?'Лучший набор по выбранной тактике: '+b.picked.map(c=>c.name).join(' + ')+'. '+b.spentPower+' мощи'+(b.spentChips?' и '+b.spentChips+' чипсин':'')+'. '+b.picked.map(c=>c.name+': '+(c.text||whyCard(c,phase()))).join(' ; '):'Доступных покупок по гарантированной мощности '+funds.power+' пока нет или барахолка не заполнена. Условную мощь добавляй вручную после выполнения условий.',idx:-1});
+ steps.push({head:'Завершение хода',body:'Примени эффекты конца хода, проверь статус/жизни и чипсины. Сбрось сыгранные карты и остаток руки, добери новую руку по правилам своей партии.',idx:-1});
+ return steps;
+}
+function strategyPage(){
+ ensureQ();const p=s.players[s.me],tactic=SR_TACTICS.some(x=>x[0]===s.strategyTactic)?s.strategyTactic:'balanced';
+ const funds=planFunds(),b=srBundleList(purchaseBundles(),tactic),steps=srSteps(tactic),odds=SR_TACTICS.map(x=>({id:x[0],label:x[1],v:srEstimate(x[0])}));
+ let out='<section class="fastHero"><div class="fastTitle"><div><div class="level">Анализ твоего хода · '+esc(phase())+'</div><h2>Стратегия для '+esc(p.name)+'</h2><p class="panelText">Жизни '+n(p.hp)+' ❤ · известные ПО '+score(p)+' · мощь '+funds.power+(funds.conditional?' + до '+funds.conditional+' условной':'')+' · чипсины '+n(p.chips)+'</p></div><select id="meSelect" style="max-width:170px" aria-label="Мой игрок">'+s.players.map((v,i)=>'<option value="'+i+'" '+(i===s.me?'selected':'')+'>'+esc(v.name)+'</option>').join('')+'</select></div><div class="row flexwrap" style="margin-top:12px"><button class="btn purple" data-action="quickOpen" data-kind="hand" data-p="'+s.me+'">+ Карта в руку</button><button class="btn ghost" data-action="tab" data-tab="fast">Барахолка</button><button class="btn ghost" data-action="hpExact" data-p="'+s.me+'">❤ Жизни</button><button class="btn ghost" data-action="powerExact">⚡ Мощь</button></div></section>';
+ out+='<section class="fastModule"><h3>Выбери тактику</h3><div class="row flexwrap">'+odds.map(o=>'<button type="button" class="btn '+(o.id===tactic?'primary':'ghost')+'" data-strategy-tactic="'+o.id+'">'+esc(o.label)+(o.v?' · ~'+o.v.low+'–'+o.v.high+'%':'')+'</button>').join('')+'</div><p class="panelText" style="margin-top:10px">'+esc(srTacticAdvice(tactic,p))+'</p><p class="small muted">Диапазон — иллюстративная модель выигрыша через '+(odds[0].v?odds[0].v.horizon:'несколько')+' будущих кругов при условных темпах покупки и атак. Это НЕ реальная вероятность победы: неизвестны руки/колоды соперников, защиты, беспределы и их решения.'+(odds[0].v?'':' Чтобы показать расчёт, внеси свою руку и хотя бы одну карту на барахолку.')+'</p></section>';
+ out+='<div class="fastGrid"><main><section class="fastModule"><div class="sectionHead"><h3>Что делать прямо сейчас — по порядку</h3><span class="badge">'+steps.length+' шагов</span></div>'+steps.map((st,i)=>'<div class="planStep"><div class="planNum">'+(i+1)+'</div><div><b>'+esc(st.head)+'</b><p>'+esc(st.body)+'</p>'+(st.idx>=0?'<button class="btn ghost tiny" data-action="handPlay" data-p="'+s.me+'" data-i="'+st.idx+'">✓ Отметить сыгранной</button>':'')+'</div></div>').join('')+'</section></main>';
+ out+='<aside><section class="fastModule"><h3>Покупки с учётом эффекта карты</h3>'+(b.length?b.slice(0,4).map((x,i)=>'<div class="planBundle '+(i===0?'best':'')+'"><div class="bundleMeta"><span class="level">'+(i===0?'Лучший вариант':'Альтернатива '+i)+'</span><b>'+x.spentPower+' ⚡'+(x.spentChips?' + '+x.spentChips+' ◈':'')+'</b></div><b>'+esc(x.picked.map(c=>c.name).join(' + '))+'</b><p class="small muted">'+esc(x.picked.map(c=>{const f=srFact(c);return c.name+': '+(f.text||whyCard(c,phase()))+(f.conditional?' (условие!)':'')}).join(' ; '))+'</p></div>').join(''):'<p class="muted">Внеси карты и стоимость барахолки, чтобы получить варианты покупок.</p>')+'</section><section class="fastModule"><h3>Здоровье и угрозы</h3>'+s.players.map((v,i)=>'<div class="vsline"><span>'+esc(v.name)+(i===s.me?' · ты':'')+'</span><b>'+n(v.hp)+' ❤ · '+score(v)+' ПО</b></div>').join('')+'<p class="small muted">При низком здоровье защита повышается в оценке. Выбор цели зависит от ограничений текста каждой атакующей карты, здоровья и очков противников.</p></section></aside></div>';
+ return out;
+}
+function miniPlan(){
+ const t=SR_TACTICS.some(x=>x[0]===s.strategyTactic)?s.strategyTactic:'balanced',steps=srSteps(t),first=steps.find(x=>x.idx>=0)||steps[0];
+ return '<h3 style="margin:7px 0 6px">Следующее действие: '+esc(first.head)+'</h3><p class="small muted">'+esc(first.body.slice(0,230))+'</p><button class="btn primary full" data-action="tab" data-tab="strategy">Полный план и прогноз победы</button>';
+}
+document.addEventListener('click',function(e){
+ const b=e.target.closest('[data-strategy-tactic]');if(!b)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ s.strategyTactic=b.dataset.strategyTactic;
+ persist();render();
+},true);
+
 function wizardMeta(pi){const p=s.players[pi];modal(`<h2>Свойства: ${esc(p.name)}</h2><p class="panelText">Внеси то, что написано на твоём жетоне и фамильяре. Это уточнит стратегию и напомнит об эффектах.</p><div class="field"><label>Особое свойство колдуна</label><select id="wizardAbility"><option value="none" ${!p.abilityKind||p.abilityKind==='none'?'selected':''}>Не выбрано</option><option value="wizardChips" ${p.abilityKind==='wizardChips'?'selected':''}>Получение волшебника → чипсина / снятие лошары</option><option value="creatureChips" ${p.abilityKind==='creatureChips'?'selected':''}>Получение твари → чипсина</option><option value="other" ${p.abilityKind==='other'?'selected':''}>Другое (укажу вручную)</option></select></div><div class="field"><label>Точный текст свойства (не обязательно)</label><textarea id="wizardText" rows="2" placeholder="Перепиши важное условие с жетона">${esc(p.abilityText||'')}</textarea></div><div class="field"><label>Имя фамильяра</label><input id="wizardFam" value="${esc(p.familiarName||'')}" list="availableCards" placeholder="Например: Мескалито, книжный червь"></div><div class="footer"><button class="btn ghost" data-action="close">Отмена</button><button class="btn primary" data-action="wizardMetaSave" data-p="${pi}">Сохранить</button></div>`)}
 function quickOpen(kind='hand',pi=s.viewPlayer,slot=null){ensureQ();quickCtx={kind,player:cap(n(pi),0,s.players.length-1),slot:Number.isInteger(slot)?slot:null};const kinds=[['hand','В руку'],['owned','Куплена / получена'],['played','Сыграна'],['basic','На обычную барахолку'],['legend','На рынок легенд']];modal(`<h2>Найти и записать карту</h2><p class="panelText">Начни вводить название, код или выбери категорию. Запись одним касанием.</p><div class="formrow"><div><label>Кому / куда</label><select id="quickDest">${kinds.map(([v,t])=>`<option value="${v}" ${kind===v?'selected':''}>${t}</option>`).join('')}</select></div><div><label>Игрок</label><select id="quickPlayer">${s.players.map((p,i)=>`<option value="${i}" ${quickCtx.player===i?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div></div><div class="formrow"><div><label for="quickSearch">Название или код</label><input id="quickSearch" placeholder="Беспредел, 2A, MA…" inputmode="search" autocomplete="off" autofocus></div><div><label for="quickCategory">Категория</label><select id="quickCategory">${CATEGORY_OPTIONS.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select></div></div><div id="quickMatches" style="max-height:46dvh;overflow:auto"></div><div class="footer"><span class="small muted grow" id="quickCount"></span><button class="btn ghost" data-action="close">Готово</button></div>`);quickFilter('')}
 function quickFilter(text){const dest=$('quickMatches');if(!dest)return;const q=String(text||'').trim().toLocaleLowerCase('ru').replace(/ё/g,'е'),cat=$('quickCategory')?.value||'all';const all=s.library.filter(c=>matchesCard(c,q,cat)).slice().sort((a,b)=>{const am=a.name.toLocaleLowerCase('ru').replace(/ё/g,'е'),bm=b.name.toLocaleLowerCase('ru').replace(/ё/g,'е');const aa=am.includes(q)?0:1,bb=bm.includes(q)?0:1;const ai=s.recent.indexOf(a.name),bi=s.recent.indexOf(b.name);return aa-bb||(ai===-1?999:ai)-(bi===-1?999:bi)||a.name.localeCompare(b.name,'ru')}).slice(0,q||cat!=='all'?60:16);dest.innerHTML=all.map(c=>`<button class="quickResult" data-action="quickSelect" data-name="${esc(c.name)}"><span><b>${esc(c.name)}</b><small>${esc(CATEGORY_OPTIONS.find(x=>x[0]===cardCategory(c))?.[1]||'Карта')} · ${esc(c.isEvent?c.text:cardSummary(c))}</small></span><span class="ins">+</span></button>`).join('')+`<button class="quickResult" data-action="quickNew"><span><b>+ Новая карта${q?` «${esc(text)}»`:''}</b><small>Название, цена, ПО и свойства</small></span><span class="ins">Создать</span></button>`;$('quickCount').textContent=`Найдено: ${all.length}`;}
@@ -399,7 +573,7 @@ else if(action==='quickNew')quickNew();
 else if(action==='quickNewSave'){const name=$('qName').value.trim();if(!name)return toast('Введи название');const get=id=>{const v=$(id)?.value;return v===''?null:n(v)};const cost=get('qCost'),vp=get('qVP');const c=cardCopy({name,cost:cost??0,vp:vp??0,unknownCost:cost===null,unknownVP:vp===null,power:get('qPower')??0,draw:get('qDraw')??0,damage:get('qDamage')??0,heal:get('qHeal')??0,trash:get('qTrash')??0,chipSymbol:!!$('qChipSymbol').checked,type:$('qType').value,tag:$('qTag').value,text:$('qText').value.trim()});saveTemplate(c);quickPlace(name);close();}
 else if(action==='clearHand'){if(!s.hands[pi]?.length)return;record(`${nameOf(pi)}: рука очищена`,()=>s.hands[pi]=[])}
 else if(action==='handRemove'){const c=s.hands[pi]?.[i];if(!c)return;record(`${nameOf(pi)}: убрана из руки «${c.name}»`,()=>{if(c.played&&s.active===pi)s.power=Math.max(0,s.power-n(c.power));s.hands[pi].splice(i,1)})}
-else if(action==='handPlay'){const c=s.hands[pi]?.[i];if(!c)return;const next=!c.played;record(`${nameOf(pi)}: ${next?'сыграна':'отменён розыгрыш'} «${c.name}»`,()=>{c.played=next;if(s.active===pi)s.power=Math.max(0,s.power+(next?1:-1)*n(c.power));if(next)s.seen[pi].push({...c,turn:s.turn});else{const j=s.seen[pi].findLastIndex(x=>x.name===c.name&&x.turn===s.turn);if(j>=0)s.seen[pi].splice(j,1)}});if(next&&(c.damage||c.heal||c.draw||c.text))toast('Проверь условия карты и примени остальные эффекты вручную')}
+else if(action==='handPlay'){const c=s.hands[pi]?.[i];if(!c)return;const next=!c.played;record(`${nameOf(pi)}: ${next?'сыграна':'отменён розыгрыш'} «${c.name}»`,()=>{c.played=next;if(s.active===pi&&!powerIsConditional(c))s.power=Math.max(0,s.power+(next?1:-1)*n(c.power));if(next)s.seen[pi].push({...c,turn:s.turn});else{const j=s.seen[pi].findLastIndex(x=>x.name===c.name&&x.turn===s.turn);if(j>=0)s.seen[pi].splice(j,1)}});if(next&&(c.damage||c.heal||c.draw||c.text))toast('Проверь условия карты и примени остальные эффекты вручную')}
 else if(action==='viewQuickDeck')quickDeck(pi);
 else if(action==='removeOwnedFast'){const c=s.players[pi].cards[i];if(!c)return;close();record(`${nameOf(pi)}: удалена из приобретений «${c.name}»`,()=>s.players[pi].cards.splice(i,1))}
 

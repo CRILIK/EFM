@@ -78,3 +78,8 @@ body:before {content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .photoViewer{overflow:auto;touch-action:pan-y;}
 .photoViewerStage{max-height:95dvh;max-width:95vw;}
 .photoViewer img{object-fit:contain!important;object-position:center!important;max-width:min(95vw,760px);max-height:calc(100dvh - 105px);width:auto;height:auto;}
+
+/* v18: readable tactical choices on mobile */
+[data-strategy-tactic]{min-height:44px;flex:1 1 130px;white-space:normal;line-height:1.4}
+.planStep>div:last-child{min-width:0}.planStep p{white-space:normal;overflow-wrap:anywhere;line-height:1.55}.planStep .btn{margin-top:7px}
+@media(max-width:570px){.fastModule .row.flexwrap{gap:7px}[data-strategy-tactic]{flex:1 1 42%;font-size:12px;padding:9px 5px}.planStep{gap:10px}}

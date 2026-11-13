@@ -114,7 +114,6 @@
   "Премиальный": "assets/images/cards/swamp-78190a8d0d1c.webp",
   "Верблюжелапный": "assets/images/cards/swamp-daf245212c2a.webp",
   "Ароматный": "assets/images/cards/swamp-047b59fbc535.webp",
-  "Бингошальный": "assets/images/cards/swamp-8d78756b424b.webp",
   "Прожжённый": "assets/images/cards/swamp-787acc3f11a9.webp",
   "Чистилищный": "assets/images/cards/swamp-e620f6524fb8.webp",
   "Страдающий": "assets/images/cards/swamp-7c757c9f9672.webp",
@@ -227,5 +226,6 @@
   "Мегабеспредел MB": "assets/images/cards/chip-8573d08c2a8b.webp",
   "Мегабеспредел MG": "assets/images/cards/chip-11637b79f1fc.webp",
   "Мегабеспредел MD": "assets/images/cards/chip-0366e27832b7.webp",
-  "Мегабеспредел MF": "assets/images/cards/chip-6a3f3c63d07b.webp"
+  "Мегабеспредел MF": "assets/images/cards/chip-6a3f3c63d07b.webp",
+  "Бингочальный": "assets/images/cards/swamp-8d78756b424b.webp"
 }
